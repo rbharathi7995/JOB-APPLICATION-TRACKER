@@ -11,13 +11,35 @@ const Job=require("./models/Job.js");
 
 app.use(express.json()); //  ← understands JSON body
 
-app.get('/api/jobs',(req,res)=>{
-    res.send("Welcome to Job Application Tracker API");
+app.get('/api/jobs',async(req,res)=>{
+    try{
+        const jobs=await Job.find()
+        res.status(200).json(jobs);
+    }
+    catch(error){
+        res.status(400).json({message:error.message});
+    }
+
+})
+
+app.get('/api/jobs/:id',async(req,res)=>{
+    try{
+        const job=await Job.findById(req.params.id);
+        res.status(200).json(job);
+    }
+    catch(error){
+        res.status(400).json({message:error.message});
+    }
+
 })
 
 app.post('/api/jobs',async(req,res)=>{
-    const job=await Job.create(req.body); //job.create is asynchronous so we need to use await and async. 
-    res.status(201).json(job);
+    try{
+        const job=await Job.create(req.body);
+        res.status(201).json(job);
+    } catch(error){
+        res.status(400).json({message:error.message}); //to handle bad request
+    }
 })
 
 const connectDB=async()=>{
