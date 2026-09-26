@@ -25,6 +25,10 @@ app.get('/api/jobs',async(req,res)=>{
 app.get('/api/jobs/:id',async(req,res)=>{
     try{
         const job=await Job.findById(req.params.id);
+        
+        if(!job){
+            return res.status(404).json({message:"Job not found"});
+        }
         res.status(200).json(job);
     }
     catch(error){
