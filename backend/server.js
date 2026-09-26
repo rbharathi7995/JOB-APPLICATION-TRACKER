@@ -45,7 +45,21 @@ app.post('/api/jobs',async(req,res)=>{
         res.status(400).json({message:error.message}); //to handle bad request
     }
 })
-
+app.put('/api/jobs/:id',async(req,res)=>{
+    try{
+        const job=await Job.findByIdAndUpdate(req.params.id,req.body,
+            {
+                new:true,
+                runValidators:true
+            
+            })
+        
+        res.status(201).json(job);
+    }
+    catch(error){
+        res.status(400).json({message:error.message});
+    }
+})
 const connectDB=async()=>{
     try{
         await mongoose.connect(process.env.MONGO_URI);
