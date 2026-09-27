@@ -35,7 +35,7 @@ const authMiddleware=(req,res,next)=>{
 //Routes for jobs
 app.get('/api/jobs',authMiddleware,async(req,res)=>{
     try{
-        const jobs=await Job.find()
+        const jobs=await Job.find({user:req.user.id});
         res.status(200).json(jobs);
     }
     catch(error){
@@ -47,10 +47,10 @@ app.get('/api/jobs',authMiddleware,async(req,res)=>{
 
 app.get('/api/jobs/:id',authMiddleware,async(req,res)=>{
     try{
-        const job=await Job.findById(req.params.id);
+        const job=await Job.findOne({_id:req.params.id,user:req.user.id}); //user: is refers to the field name inside your Job document:
         
         if(!job){
-            return res.status(404).json({message:"Job not found"});
+            return res.status(404).json({message:"No Job Found"});
         }
         res.status(200).json(job);
     }
@@ -63,7 +63,8 @@ app.get('/api/jobs/:id',authMiddleware,async(req,res)=>{
 
 app.post('/api/jobs',authMiddleware,async(req,res)=>{
     try{
-        const job=await Job.create(req.body);
+        console.log(req.user);
+        const job=await Job.create({...req.body,user:req.user.id});//spread operator Take everything inside this object/array and bring it here.
         res.status(201).json(job);
     } catch(error){
         res.status(400).json({message:error.message}); //to handle bad request
@@ -72,12 +73,15 @@ app.post('/api/jobs',authMiddleware,async(req,res)=>{
 
 app.put('/api/jobs/:id',authMiddleware,async(req,res)=>{
     try{
-        const job=await Job.findByIdAndUpdate(req.params.id,req.body,
+        const job=await Job.findOneAndUpdate({_id:req.params.id,user:req.user.id},req.body,
             {
                 returnDocument:"after",
                 runValidators:true
             
             })
+         if(!job){
+           return res.status(404).json("No Job Found");
+         }
         
         res.status(200).json(job);
     }
@@ -88,9 +92,9 @@ app.put('/api/jobs/:id',authMiddleware,async(req,res)=>{
 
 app.delete('/api/jobs/:id',authMiddleware,async(req,res)=>{
     try{
-        const job=await Job.findByIdAndDelete(req.params.id);
+        const job=await Job.findOneAndDelete({_id:req.params.id,user:req.user.id});
         if(!job){
-            return res.status(404).json({message:"Job not found"});
+            return res.status(404).json({message:"No Job Found"});
         }
         res.status(200).json(job);
     }

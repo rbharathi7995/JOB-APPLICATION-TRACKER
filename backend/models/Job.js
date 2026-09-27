@@ -32,6 +32,11 @@ const JobSchema=new mongoose.Schema({
     },  
     numberOfOpenings:{
         type:Number
+    },
+    user:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"User",
+        required:[true,"please provide user"]
     }
 
 
