@@ -15,7 +15,25 @@ const User=require("./models/User.js");
 
 app.use(express.json()); //  ← understands JSON body
 
-app.get('/api/jobs',async(req,res)=>{
+const authMiddleware=(req,res,next)=>{
+    try{
+        const header=req.headers.authorization;
+        if(!header){
+            return res.status(401).json({message:"Unauthorized"});
+        }
+        const token=header.split(' ')[1];
+        const decoded=jwt.verify(token,process.env.JWT_SECRET);
+        req.user=decoded;
+        next();
+    }
+    catch(error){
+        res.status(401).json({message:"Unauthorized"});
+    }
+
+}
+
+//Routes for jobs
+app.get('/api/jobs',authMiddleware,async(req,res)=>{
     try{
         const jobs=await Job.find()
         res.status(200).json(jobs);
@@ -27,7 +45,7 @@ app.get('/api/jobs',async(req,res)=>{
 })
 
 
-app.get('/api/jobs/:id',async(req,res)=>{
+app.get('/api/jobs/:id',authMiddleware,async(req,res)=>{
     try{
         const job=await Job.findById(req.params.id);
         
@@ -43,7 +61,7 @@ app.get('/api/jobs/:id',async(req,res)=>{
 })
 
 
-app.post('/api/jobs',async(req,res)=>{
+app.post('/api/jobs',authMiddleware,async(req,res)=>{
     try{
         const job=await Job.create(req.body);
         res.status(201).json(job);
@@ -52,7 +70,7 @@ app.post('/api/jobs',async(req,res)=>{
     }
 })
 
-app.put('/api/jobs/:id',async(req,res)=>{
+app.put('/api/jobs/:id',authMiddleware,async(req,res)=>{
     try{
         const job=await Job.findByIdAndUpdate(req.params.id,req.body,
             {
@@ -68,7 +86,7 @@ app.put('/api/jobs/:id',async(req,res)=>{
     }
 })
 
-app.delete('/api/jobs/:id',async(req,res)=>{
+app.delete('/api/jobs/:id',authMiddleware,async(req,res)=>{
     try{
         const job=await Job.findByIdAndDelete(req.params.id);
         if(!job){
