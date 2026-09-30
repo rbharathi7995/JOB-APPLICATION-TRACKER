@@ -1,16 +1,16 @@
 const Job=require('../models/Job.js');
 
-const getAllJobs=async(req,res)=>{
+const getAllJobs=async(req,res,next)=>{
     try{
         const jobs=await Job.find({user:req.user.id});
         res.status(200).json(jobs);
     }
     catch(error){
-        res.status(400).json({message:error.message});
+        next(error);
     }
 }
 
-const getSingleJob=async(req,res)=>{
+const getSingleJob=async(req,res,next)=>{
     try{
         const job=await Job.findOne({_id:req.params.id,user:req.user.id}); //user: is refers to the field name inside your Job document:
         
@@ -20,21 +20,21 @@ const getSingleJob=async(req,res)=>{
         res.status(200).json(job);
     }
     catch(error){
-        res.status(400).json({message:error.message});
+         next(error);
     }
 }
 
-const createJob=async(req,res)=>{
+const createJob=async(req,res,next)=>{
     try{
-        console.log(req.user);
+        
         const job=await Job.create({...req.body,user:req.user.id});//spread operator Take everything inside this object/array and bring it here.
         res.status(201).json(job);
     } catch(error){
-        res.status(400).json({message:error.message}); //to handle bad request
+        next(error);
     }
 }
 
-const updateJob=async(req,res)=>{
+const updateJob=async(req,res,next)=>{
     try{
         const job=await Job.findOneAndUpdate({_id:req.params.id,user:req.user.id},req.body,
             {
@@ -49,11 +49,11 @@ const updateJob=async(req,res)=>{
         res.status(200).json(job);
     }
     catch(error){
-        res.status(400).json({message:error.message});
+        next(error);
     }
 }
 
-const deleteJob=async(req,res)=>{
+const deleteJob=async(req,res,next)=>{
     try{
         const job=await Job.findOneAndDelete({_id:req.params.id,user:req.user.id});
         if(!job){
@@ -62,7 +62,7 @@ const deleteJob=async(req,res)=>{
         res.status(200).json(job);
     }
     catch(error){
-        res.status(400).json({message:error.message});
+        next(error);
     }
 }
 

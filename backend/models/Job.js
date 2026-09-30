@@ -31,7 +31,8 @@ const JobSchema=new mongoose.Schema({
         required:[true,"please provide required skills"]       
     },  
     numberOfOpenings:{
-        type:Number
+        type:Number,
+        min:1
     },
     user:{
         type:mongoose.Schema.Types.ObjectId,

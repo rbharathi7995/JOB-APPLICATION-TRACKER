@@ -9,12 +9,14 @@ const mongoose=require("mongoose");
 
 const router=require('./routes/jobRoutes.js');
 const authRouter=require('./routes/authRoutes.js');
+const errorMiddleWare=require('./middleware/errorHandler.js');
 
 app.use(express.json()); //  ← understands JSON body
 //for job routes
 app.use('/api/jobs',router);
 //for athentication routes
 app.use('/api/auth',authRouter);
+app.use(errorMiddleWare);
 
 const connectDB=async()=>{
     try{
