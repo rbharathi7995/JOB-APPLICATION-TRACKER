@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import JobCard from './components/JobCard.jsx';
 import Navbar from './components/Navbar.jsx';
-
+import Login from './components/Login.jsx';
 function App() {
 
       const jobs=[
@@ -30,7 +30,8 @@ function App() {
           status={job.status}
           />       
          )
-       }) }      
+       }) }  
+       <Login />    
     </>
   )
 }
