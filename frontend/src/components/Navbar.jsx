@@ -1,7 +1,10 @@
 
-function Navbar(){
+function Navbar({ handleLogout }) {
     return(
-        <h1>Job Application Tracker</h1>
+        <div>
+            <h1>Job Application Tracker</h1>
+            <button onClick={handleLogout}>Logout</button>
+        </div>
     )
 }
 export default Navbar;

@@ -32,6 +32,8 @@ function Login({ setIsLoggedIn }) {
 
           });
         }
+    
+
     return (
         <div>
             <input onChange={(e) => setEmail(e.target.value)}

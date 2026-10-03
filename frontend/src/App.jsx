@@ -24,9 +24,16 @@ function App() {
         .catch((error) => console.log(error));   
       },[isLoggedIn]);
 
+      function handleLogout(){
+        localStorage.removeItem('token');
+        setIsLoggedIn(false);
+        setJobs([]);
+     }
+
   return (
     <>
-       <Navbar/>
+       <Navbar handleLogout={handleLogout}/>
+
        {jobs.map((job) => {
         return(
           <JobCard 
