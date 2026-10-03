@@ -1,14 +1,9 @@
-import { useEffect } from 'react';
+import { useEffect,useState } from 'react';
 import JobCard from './components/JobCard.jsx';
 import Navbar from './components/Navbar.jsx';
 import Login from './components/Login.jsx';
 function App() {
-
-      const jobs=[
-      {id:1, company:'Microsoft', jobTitle:'Software Engineer', status:'Applied' },
-      {id:2, company:'Google', jobTitle:'Frontend Engineer', status:'Interview' },
-      {id:3, company:'Amazon', jobTitle:'SDE Intern', status:'Rejected' }
-      ];
+      const[jobs, setJobs] =useState([]);
 
       useEffect(() => {
         fetch('http://localhost:5000/api/jobs',{
@@ -18,7 +13,10 @@ function App() {
           }
         })
         .then((response) => 
-          console.log(response))
+          response.json())
+        .then((data) => {
+          setJobs(data);
+        })
         .catch((error) => console.log(error));   
       },[]);
 
@@ -29,8 +27,8 @@ function App() {
        {jobs.map((job) => {
         return(
           <JobCard 
-          key={job.id}
-          company={job.company} 
+          key={job._id}
+          company={job.companyName} 
           jobTitle={job.jobTitle} 
           status={job.status}
           />       
