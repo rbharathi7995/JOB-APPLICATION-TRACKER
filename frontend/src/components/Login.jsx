@@ -20,7 +20,6 @@ function Login({ setIsLoggedIn }) {
             },
             body: JSON.stringify(loginData)
         }).then((response) => {
-            console.log(response.ok);
             return response.json();
         })
             .then((data) => {

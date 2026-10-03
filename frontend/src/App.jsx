@@ -2,6 +2,7 @@ import { useEffect,useState } from 'react';
 import JobCard from './components/JobCard.jsx';
 import Navbar from './components/Navbar.jsx';
 import Login from './components/Login.jsx';
+import AddJob from './components/AddJob.jsx';
 function App() {
       const[jobs, setJobs] = useState([]);
       const [loading, setLoading] = useState(true);
@@ -48,25 +49,30 @@ function App() {
 
        {/* isLoggedIn decides whether to show jobs or Login form */}
        {isLoggedIn ? (
-        jobs.map((job) => {
-        return(
-          <JobCard 
-          key={job._id}
-          company={job.companyName} 
-          jobTitle={job.jobTitle} 
-          status={job.status}
-          dateApplied={job.dateApplied}
-          jobLink={job.jobLink}
-          location={job.location}
-          skillsRequired={job.skillsRequired}
-          numberOfOpenings={job.numberOfOpenings}
-          />       
-         )
-       })
+      <>
+        <AddJob setJobs={setJobs}/>
+       
+        {jobs.map((job) => {
+          return(
+            <JobCard 
+              key={job._id}
+              company={job.companyName} 
+              jobTitle={job.jobTitle} 
+              status={job.status}
+              dateApplied={job.dateApplied}
+              jobLink={job.jobLink}
+              location={job.location}
+              skillsRequired={job.skillsRequired}
+              numberOfOpenings={job.numberOfOpenings}
+            />       
+          )
+       })}
+
+      </>
        )  : (
         <Login setIsLoggedIn={setIsLoggedIn}/> // Pass setter so Login can update App's login state   
        )}
-       
+
     </>
   )
 }
