@@ -11,7 +11,12 @@ function App() {
       ];
 
       useEffect(() => {
-        fetch('http://localhost:5000/api/jobs')
+        fetch('http://localhost:5000/api/jobs',{
+          method:'GET',
+          headers: {
+            Authorization:`Bearer ${localStorage.getItem('token')}` //token is a key in local storage that stores the token value.
+          }
+        })
         .then((response) => 
           console.log(response))
         .catch((error) => console.log(error));   
