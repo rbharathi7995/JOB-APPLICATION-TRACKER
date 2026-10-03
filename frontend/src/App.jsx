@@ -4,6 +4,7 @@ import Navbar from './components/Navbar.jsx';
 import Login from './components/Login.jsx';
 function App() {
       const[jobs, setJobs] = useState([]);
+      const [loading, setLoading] = useState(true);
       const [isLoggedIn, setIsLoggedIn] = useState(
         () => localStorage.getItem('token') !== null
       );  
@@ -12,6 +13,7 @@ function App() {
         if (!token) {
          return;
         }
+        
         fetch('http://localhost:5000/api/jobs',{
           method:'GET',
           headers: {
@@ -22,8 +24,12 @@ function App() {
           response.json())
         .then((data) => {
           setJobs(data);
+          setLoading(false);
         })
-        .catch((error) => console.log(error));   
+        .catch((error) => {
+          console.log(error);
+          setLoading(false);
+        });
       },[isLoggedIn]);
      
 
@@ -37,6 +43,9 @@ function App() {
   return (
     <>
        <Navbar handleLogout={handleLogout}/>
+       {loading && <p>Loading...</p>}
+       {jobs.length === 0 && !loading && isLoggedIn && <p>No jobs applications yet.</p>}
+
        {/* isLoggedIn decides whether to show jobs or Login form */}
        {isLoggedIn ? (
         jobs.map((job) => {
