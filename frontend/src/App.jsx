@@ -31,6 +31,11 @@ function App() {
           company={job.companyName} 
           jobTitle={job.jobTitle} 
           status={job.status}
+          dateApplied={job.dateApplied}
+          jobLink={job.jobLink}
+          location={job.location}
+          skillsRequired={job.skillsRequired}
+          numberOfOpenings={job.numberOfOpenings}
           />       
          )
        }) }  
