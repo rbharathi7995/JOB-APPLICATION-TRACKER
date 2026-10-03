@@ -23,8 +23,8 @@ function Login({ setIsLoggedIn }) {
         })
             .then((data) => {
                 if(data.token){ 
-                localStorage.setItem('token', data.token);
-                setIsLoggedIn(true);
+                 localStorage.setItem('token', data.token);
+                 setIsLoggedIn(true);
                 }
                 else{
                     console.log(data.message);

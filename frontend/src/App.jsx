@@ -4,7 +4,8 @@ import Navbar from './components/Navbar.jsx';
 import Login from './components/Login.jsx';
 function App() {
       const[jobs, setJobs] = useState([]);
-      const [isLoggedIn, setIsLoggedIn] = useState(false);      
+      const [isLoggedIn, setIsLoggedIn] = useState(false);  
+
       useEffect(() => {
         const token = localStorage.getItem('token');
         if (!token) {
@@ -23,6 +24,7 @@ function App() {
         })
         .catch((error) => console.log(error));   
       },[isLoggedIn]);
+     
 
       function handleLogout(){
         localStorage.removeItem('token');
@@ -33,8 +35,9 @@ function App() {
   return (
     <>
        <Navbar handleLogout={handleLogout}/>
-
-       {jobs.map((job) => {
+       {/* isLoggedIn decides whether to show jobs or Login form */}
+       {isLoggedIn ? (
+        jobs.map((job) => {
         return(
           <JobCard 
           key={job._id}
@@ -48,8 +51,11 @@ function App() {
           numberOfOpenings={job.numberOfOpenings}
           />       
          )
-       }) }  
-       <Login setIsLoggedIn={setIsLoggedIn}/>    
+       })
+       )  : (
+        <Login setIsLoggedIn={setIsLoggedIn}/> // Pass setter so Login can update App's login state   
+       )}
+       
     </>
   )
 }
