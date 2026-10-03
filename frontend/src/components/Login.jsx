@@ -20,19 +20,6 @@ function Login() {
         }).then((response) => response.json())
             .then((data) => {
                 localStorage.setItem('token', data.token);
-                const token = localStorage.getItem('token');
-                const headers = {
-                    Authorization: `Bearer ${token}`
-                };
-
-                fetch('http://localhost:5000/api/jobs', {
-                    method:'GET',
-                    headers: headers,
-                }).then((response) => response.json())
-                    .then((data) => {
-                        console.log(data);
-                    });
-
           });
         }
     return (
