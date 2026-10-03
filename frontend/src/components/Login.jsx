@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 
-function Login() {
+function Login({ setIsLoggedIn }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     function handleLogin() {
@@ -17,9 +17,19 @@ function Login() {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(loginData)
-        }).then((response) => response.json())
+        }).then((response) => {
+            console.log(response.ok);
+            return response.json();
+        })
             .then((data) => {
+                if(data.token){ 
                 localStorage.setItem('token', data.token);
+                setIsLoggedIn(true);
+                }
+                else{
+                    console.log(data.message);
+                }
+
           });
         }
     return (

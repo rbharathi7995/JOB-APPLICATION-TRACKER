@@ -3,13 +3,17 @@ import JobCard from './components/JobCard.jsx';
 import Navbar from './components/Navbar.jsx';
 import Login from './components/Login.jsx';
 function App() {
-      const[jobs, setJobs] =useState([]);
-
+      const[jobs, setJobs] = useState([]);
+      const [isLoggedIn, setIsLoggedIn] = useState(false);      
       useEffect(() => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            return;
+        }
         fetch('http://localhost:5000/api/jobs',{
           method:'GET',
           headers: {
-            Authorization:`Bearer ${localStorage.getItem('token')}` //token is a key in local storage that stores the token value.
+            Authorization:`Bearer ${token}`
           }
         })
         .then((response) => 
@@ -18,12 +22,11 @@ function App() {
           setJobs(data);
         })
         .catch((error) => console.log(error));   
-      },[]);
+      },[isLoggedIn]);
 
   return (
     <>
        <Navbar/>
-
        {jobs.map((job) => {
         return(
           <JobCard 
@@ -39,7 +42,7 @@ function App() {
           />       
          )
        }) }  
-       <Login />    
+       <Login setIsLoggedIn={setIsLoggedIn}/>    
     </>
   )
 }
