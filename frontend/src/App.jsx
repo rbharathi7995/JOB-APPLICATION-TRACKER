@@ -4,12 +4,13 @@ import Navbar from './components/Navbar.jsx';
 import Login from './components/Login.jsx';
 function App() {
       const[jobs, setJobs] = useState([]);
-      const [isLoggedIn, setIsLoggedIn] = useState(false);  
-
+      const [isLoggedIn, setIsLoggedIn] = useState(
+        () => localStorage.getItem('token') !== null
+      );  
       useEffect(() => {
         const token = localStorage.getItem('token');
         if (!token) {
-            return;
+         return;
         }
         fetch('http://localhost:5000/api/jobs',{
           method:'GET',
@@ -29,6 +30,7 @@ function App() {
       function handleLogout(){
         localStorage.removeItem('token');
         setIsLoggedIn(false);
+        
         setJobs([]);
      }
 
