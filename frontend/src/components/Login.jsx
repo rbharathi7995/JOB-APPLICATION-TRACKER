@@ -4,6 +4,8 @@ import { useState } from 'react';
 function Login({ setIsLoggedIn }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const[error, setError] = useState('');
+
     function handleLogin() {
         console.log(email, password);
         const loginData = {
@@ -23,11 +25,12 @@ function Login({ setIsLoggedIn }) {
         })
             .then((data) => {
                 if(data.token){ 
+                 setError(''); //After a successful login, we should clear any old error
                  localStorage.setItem('token', data.token);
                  setIsLoggedIn(true);
                 }
                 else{
-                    console.log(data.message);
+                    setError(data.message);
                 }
 
           });
@@ -36,6 +39,7 @@ function Login({ setIsLoggedIn }) {
 
     return (
         <div>
+            {error && <p style ={{color:'red'}}>{error}</p>}
             <input onChange={(e) => setEmail(e.target.value)}
                 type="text" placeholder="Email" />
             <input onChange={(e) => setPassword(e.target.value)}
