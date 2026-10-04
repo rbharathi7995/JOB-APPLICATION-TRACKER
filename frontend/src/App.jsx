@@ -49,9 +49,26 @@ function App() {
      }
 
      function handleEdit(id){
+       
       setEditingJobId(id);
 
      }
+
+    function handleDelete(id){
+      fetch(`http://localhost:5000/api/jobs/${id}`,{
+        method : 'DELETE',
+        headers:{
+          'Authorization' :`Bearer ${localStorage.getItem('token')}`
+        }
+
+      }).then((response) => {
+        return response.json();
+      }).then(() => {
+        setJobs((prevJobs) => prevJobs.filter((job) => job._id !== id));
+      })
+      
+     }
+
 
   return (
     <>
@@ -83,6 +100,7 @@ function App() {
               skillsRequired={job.skillsRequired}
               numberOfOpenings={job.numberOfOpenings}
               onEdit={handleEdit}
+              onDelete={handleDelete}
             />       
           )
        })}

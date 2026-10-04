@@ -1,5 +1,5 @@
 
-function JobCard({company,id,jobTitle,status,dateApplied,jobLink,location,skillsRequired,numberOfOpenings,onEdit}){
+function JobCard({company,id,jobTitle,status,dateApplied,jobLink,location,skillsRequired,numberOfOpenings,onEdit,onDelete}){
     return(
         <div>
             <h2>{company}</h2>
@@ -12,10 +12,8 @@ function JobCard({company,id,jobTitle,status,dateApplied,jobLink,location,skills
             <p><strong>Skills Required:</strong> {skillsRequired}</p>
             <p><strong>Number of Openings:</strong> {numberOfOpenings}</p>
             <button onClick={() => onEdit(id)}>Edit</button>
+            <button onClick={() => onDelete(id)}>Delete</button>
           
-         
-
-
         </div>
     )
 }
