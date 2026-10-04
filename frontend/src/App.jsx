@@ -66,6 +66,7 @@ function App() {
         key={jobToEdit ? jobToEdit._id : 'new'}
         setJobs={setJobs}
         jobToEdit={jobToEdit}
+        setEditingJobId={setEditingJobId}
         />
        
         {jobs.map((job) => {

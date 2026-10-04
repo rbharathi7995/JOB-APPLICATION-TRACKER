@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-function AddJob({ setJobs , jobToEdit}) {
+function AddJob({ setJobs , jobToEdit , setEditingJobId }) {
      const [jobsFormData, setJobsFormData] = useState(
         jobToEdit
             ? {
@@ -23,9 +23,15 @@ function AddJob({ setJobs , jobToEdit}) {
             }
     );
 
-    function handleAddJob(){
-        fetch('http://localhost:5000/api/jobs',{
-            method:'POST',
+    function handleJobSubmit(){
+        const url=jobToEdit ? 
+        `http://localhost:5000/api/jobs/${jobToEdit._id}`
+         : 'http://localhost:5000/api/jobs';
+
+        const method=jobToEdit ? 'PUT' : 'POST';
+
+        fetch(url,{
+            method:method,
             headers:{
                 'Content-Type': 'application/json',
                 'Authorization':`Bearer ${localStorage.getItem('token')}`
@@ -34,7 +40,18 @@ function AddJob({ setJobs , jobToEdit}) {
         }).then((response) =>{
             return response.json();
         }).then((data)=>{
-           setJobs((prevJobs) => [...prevJobs, data]);
+          // setJobs((prevJobs) => [...prevJobs, data]);
+            setJobs((prevJobs) =>{
+                if(jobToEdit){
+                    const updatedJobs = prevJobs.map((job) => 
+                        job._id === data._id  ? data : job
+                ); 
+                setEditingJobId(null); // Reset the editing job ID after updating  
+                return updatedJobs;     
+                }
+                return [...prevJobs, data];
+             })
+
             setJobsFormData({
                 companyName: '',
                 jobTitle: '',  
@@ -142,9 +159,9 @@ function AddJob({ setJobs , jobToEdit}) {
                 }
             />
          {jobToEdit ? (
-            <button onClick={handleAddJob}>Update Job</button>
+            <button onClick={handleJobSubmit}>Update Job</button>
         ) : (
-            <button onClick={handleAddJob}>Add Job</button>
+            <button onClick={handleJobSubmit}>Add Job</button>
         )}
         </div>
     )
