@@ -1,15 +1,27 @@
 import { useState } from 'react';
 
-function AddJob({ setJobs }) {
-    const [jobsFormData, setJobsFormData] = useState({
-        companyName: '',
-        jobTitle: '',
-        dateApplied: '',
-        jobLink: '',
-        location: '',
-        skillsRequired: '',
-        numberOfOpenings: ''
-    });
+function AddJob({ setJobs , jobToEdit}) {
+     const [jobsFormData, setJobsFormData] = useState(
+        jobToEdit
+            ? {
+                companyName: jobToEdit.companyName,
+                jobTitle: jobToEdit.jobTitle,
+                dateApplied: jobToEdit.dateApplied.split('T')[0],
+                jobLink: jobToEdit.jobLink,
+                location: jobToEdit.location,
+                skillsRequired: jobToEdit.skillsRequired,
+                numberOfOpenings: jobToEdit.numberOfOpenings
+            }
+            : {
+                companyName: '',
+                jobTitle: '',
+                dateApplied: '',
+                jobLink: '',
+                location: '',
+                skillsRequired: '',
+                numberOfOpenings: ''
+            }
+    );
 
     function handleAddJob(){
         fetch('http://localhost:5000/api/jobs',{
@@ -34,8 +46,21 @@ function AddJob({ setJobs }) {
             });
         })
     }
-
-
+ /* useEffect(()=>{
+        
+     if(jobToEdit){
+        setJobsFormData({
+            companyName:jobToEdit.companyName,
+            jobTitle:jobToEdit.jobTitle,
+            dateApplied:jobToEdit.dateApplied.split('T')[0],
+            jobLink:jobToEdit.jobLink,
+            location:jobToEdit.location,
+            skillsRequired:jobToEdit.skillsRequired,
+            numberOfOpenings:jobToEdit.numberOfOpenings
+        })
+     }
+        },[jobToEdit]); */
+    
 
     return (
         <div>
@@ -64,11 +89,11 @@ function AddJob({ setJobs }) {
             />
             <input
                 type="date"
-                value={jobsFormData.dateApplied}
+                value={jobsFormData.dateApplied} //to get only the date part from the date-time string.
                 onChange={(e) =>
                     setJobsFormData({
                         ...jobsFormData,
-                        dateApplied: e.target.value
+                        dateApplied: e.target.value //to get only the date part from the date-time string.
                     })
                 }
             />
@@ -116,8 +141,11 @@ function AddJob({ setJobs }) {
                     })
                 }
             />
-
+         {jobToEdit ? (
+            <button onClick={handleAddJob}>Update Job</button>
+        ) : (
             <button onClick={handleAddJob}>Add Job</button>
+        )}
         </div>
     )
 }

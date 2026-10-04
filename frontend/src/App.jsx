@@ -6,9 +6,16 @@ import AddJob from './components/AddJob.jsx';
 function App() {
       const[jobs, setJobs] = useState([]);
       const [loading, setLoading] = useState(true);
+      const[editingJobId, setEditingJobId] = useState(null);
       const [isLoggedIn, setIsLoggedIn] = useState(
         () => localStorage.getItem('token') !== null
-      );  
+      );
+
+      const jobToEdit =jobs.find((job => {
+        return job._id === editingJobId;
+      }))
+
+
       useEffect(() => {
         const token = localStorage.getItem('token');
         if (!token) {
@@ -41,6 +48,11 @@ function App() {
         setJobs([]);
      }
 
+     function handleEdit(id){
+      setEditingJobId(id);
+
+     }
+
   return (
     <>
        <Navbar handleLogout={handleLogout}/>
@@ -50,12 +62,17 @@ function App() {
        {/* isLoggedIn decides whether to show jobs or Login form */}
        {isLoggedIn ? (
       <>
-        <AddJob setJobs={setJobs}/>
+        <AddJob 
+        key={jobToEdit ? jobToEdit._id : 'new'}
+        setJobs={setJobs}
+        jobToEdit={jobToEdit}
+        />
        
         {jobs.map((job) => {
           return(
             <JobCard 
               key={job._id}
+              id={job._id}
               company={job.companyName} 
               jobTitle={job.jobTitle} 
               status={job.status}
@@ -64,6 +81,7 @@ function App() {
               location={job.location}
               skillsRequired={job.skillsRequired}
               numberOfOpenings={job.numberOfOpenings}
+              onEdit={handleEdit}
             />       
           )
        })}
