@@ -79,6 +79,7 @@ function App() {
        {/* isLoggedIn decides whether to show jobs or Login form */}
        {isLoggedIn ? (
       <>
+      <main className='min-h-screen p-6 bg-gray-100'>
         <AddJob 
         key={jobToEdit ? jobToEdit._id : 'new'}
         setJobs={setJobs}
@@ -104,7 +105,7 @@ function App() {
             />       
           )
        })}
-
+      </main>
       </>
        )  : (
         <Login setIsLoggedIn={setIsLoggedIn}/> // Pass setter so Login can update App's login state   

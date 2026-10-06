@@ -63,28 +63,14 @@ function AddJob({ setJobs , jobToEdit , setEditingJobId }) {
             });
         })
     }
- /* useEffect(()=>{
-        
-     if(jobToEdit){
-        setJobsFormData({
-            companyName:jobToEdit.companyName,
-            jobTitle:jobToEdit.jobTitle,
-            dateApplied:jobToEdit.dateApplied.split('T')[0],
-            jobLink:jobToEdit.jobLink,
-            location:jobToEdit.location,
-            skillsRequired:jobToEdit.skillsRequired,
-            numberOfOpenings:jobToEdit.numberOfOpenings
-        })
-     }
-        },[jobToEdit]); */
     
-
     return (
-        <div>
-            <h2>Add Job</h2>
+        <div className="mx-auto max-w-3xl rounded-xl bg-white p-6 shadow-md">
+            <h2 className="mb-6 text-2xl font-bold text-gray-800">Add Job</h2>
             <input
                 type="text"
                 placeholder="Company Name"
+                className="mb-4 w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
                 value={jobsFormData.companyName}
                 onChange={(e) =>
                     setJobsFormData({
@@ -96,6 +82,7 @@ function AddJob({ setJobs , jobToEdit , setEditingJobId }) {
             <input
                 type="text"
                 placeholder="Job-Title"
+                className="mb-4 w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
                 value={jobsFormData.jobTitle}
                 onChange={(e) =>
                     setJobsFormData({
@@ -107,6 +94,7 @@ function AddJob({ setJobs , jobToEdit , setEditingJobId }) {
             <input
                 type="date"
                 value={jobsFormData.dateApplied} //to get only the date part from the date-time string.
+                className="mb-4 w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
                 onChange={(e) =>
                     setJobsFormData({
                         ...jobsFormData,
@@ -118,6 +106,7 @@ function AddJob({ setJobs , jobToEdit , setEditingJobId }) {
                 type="url"
                 placeholder="Job Link"
                 value={jobsFormData.jobLink}
+                className="mb-4 w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
                 onChange={(e) =>
                     setJobsFormData({
                         ...jobsFormData,
@@ -129,6 +118,7 @@ function AddJob({ setJobs , jobToEdit , setEditingJobId }) {
                 type="text"
                 placeholder="Location"
                 value={jobsFormData.location}
+                className="mb-4 w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
                 onChange={(e) =>
                     setJobsFormData({
                         ...jobsFormData,
@@ -140,6 +130,7 @@ function AddJob({ setJobs , jobToEdit , setEditingJobId }) {
                 type="text"
                 placeholder="Skills Required"
                 value={jobsFormData.skillsRequired}
+                className="mb-4 w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
                 onChange={(e) =>
                     setJobsFormData({
                         ...jobsFormData,
@@ -151,6 +142,7 @@ function AddJob({ setJobs , jobToEdit , setEditingJobId }) {
                 type="number"
                 placeholder="Number of Openings"
                 value={jobsFormData.numberOfOpenings}
+                className="mb-4 w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
                 onChange={(e) =>
                     setJobsFormData({
                         ...jobsFormData,
@@ -158,11 +150,14 @@ function AddJob({ setJobs , jobToEdit , setEditingJobId }) {
                     })
                 }
             />
-         {jobToEdit ? (
-            <button onClick={handleJobSubmit}>Update Job</button>
-        ) : (
-            <button onClick={handleJobSubmit}>Add Job</button>
-        )}
+
+            <button
+            onClick={handleJobSubmit}
+            className="w-full rounded-lg bg-blue-600 px-4 py-2 font-semibold text-white hover:bg-blue-700"
+            >
+            {jobToEdit ? 'Update Job' : 'Add Job'}
+            </button>
+
         </div>
     )
 }
