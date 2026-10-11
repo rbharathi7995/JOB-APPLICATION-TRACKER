@@ -1,20 +1,17 @@
 import { useEffect,useState } from 'react';
-import JobCard from './components/JobCard.jsx';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import Navbar from './components/Navbar.jsx';
 import Login from './components/Login.jsx';
-import AddJob from './components/AddJob.jsx';
+import Dashboard from './pages/Dashboard.jsx';
+import Applications from './pages/Applications.jsx';
+import AddJobPage from './pages/AddJobPage.jsx';
+import EditJob from './pages/EditJob.jsx';
 function App() {
       const[jobs, setJobs] = useState([]);
       const [loading, setLoading] = useState(true);
-      const[editingJobId, setEditingJobId] = useState(null);
       const [isLoggedIn, setIsLoggedIn] = useState(
         () => localStorage.getItem('token') !== null
       );
-
-      const jobToEdit =jobs.find((job => {
-        return job._id === editingJobId;
-      }))
-
 
       useEffect(() => {
         const token = localStorage.getItem('token');
@@ -40,18 +37,11 @@ function App() {
         });
       },[isLoggedIn]);
      
-
       function handleLogout(){
         localStorage.removeItem('token');
         setIsLoggedIn(false);
         
         setJobs([]);
-     }
-
-     function handleEdit(id){
-       
-      setEditingJobId(id);
-
      }
 
     function handleDelete(id){
@@ -69,49 +59,31 @@ function App() {
       
      }
 
-
   return (
-    <>
+    <BrowserRouter>
        <Navbar handleLogout={handleLogout}/>
        {loading && <p>Loading...</p>}
        {jobs.length === 0 && !loading && isLoggedIn && <p>No jobs applications yet.</p>}
 
        {/* isLoggedIn decides whether to show jobs or Login form */}
-       {isLoggedIn ? (
-      <>
-      <main className='min-h-screen p-6 bg-gray-100'>
-        <AddJob 
-        key={jobToEdit ? jobToEdit._id : 'new'}
-        setJobs={setJobs}
-        jobToEdit={jobToEdit}
-        setEditingJobId={setEditingJobId}
-        />
-       
-        {jobs.map((job) => {
-          return(
-            <JobCard 
-              key={job._id}
-              id={job._id}
-              company={job.companyName} 
-              jobTitle={job.jobTitle} 
-              status={job.status}
-              dateApplied={job.dateApplied}
-              jobLink={job.jobLink}
-              location={job.location}
-              skillsRequired={job.skillsRequired}
-              numberOfOpenings={job.numberOfOpenings}
-              onEdit={handleEdit}
-              onDelete={handleDelete}
-            />       
-          )
-       })}
-      </main>
-      </>
-       )  : (
-        <Login setIsLoggedIn={setIsLoggedIn}/> // Pass setter so Login can update App's login state   
-       )}
 
-    </>
+      {!isLoggedIn && (
+        <Login setIsLoggedIn={setIsLoggedIn} />
+      )}
+
+    <Routes>
+      <Route path="/" element={<Navigate to="/dashboard" />} />
+      <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/applications" element={<Applications
+          jobs={jobs}
+          onDelete={handleDelete}
+           />
+           } />
+      <Route path="/add-job" element={<AddJobPage setJobs={setJobs}/>} />
+      <Route path="/edit-job/:id" element={<EditJob jobs={jobs} setJobs={setJobs} />} />
+
+    </Routes>
+    </BrowserRouter>
   )
 }
 
