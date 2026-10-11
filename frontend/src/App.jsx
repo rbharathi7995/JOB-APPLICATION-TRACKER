@@ -73,7 +73,7 @@ function App() {
 
     <Routes>
       <Route path="/" element={<Navigate to="/dashboard" />} />
-      <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/dashboard" element={<Dashboard jobs={jobs}/>} />
       <Route path="/applications" element={<Applications
           jobs={jobs}
           onDelete={handleDelete}
