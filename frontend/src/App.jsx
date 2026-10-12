@@ -59,32 +59,53 @@ function App() {
       
      }
 
-  return (
-    <BrowserRouter>
-       <Navbar handleLogout={handleLogout}/>
-       {loading && <p>Loading...</p>}
-       {jobs.length === 0 && !loading && isLoggedIn && <p>No jobs applications yet.</p>}
+return (
+  <BrowserRouter>
+    {isLoggedIn ? (
+      <>
+        <Navbar handleLogout={handleLogout} />
 
-       {/* isLoggedIn decides whether to show jobs or Login form */}
+        {loading && <p>Loading...</p>}
 
-      {!isLoggedIn && (
-        <Login setIsLoggedIn={setIsLoggedIn} />
-      )}
+        <Routes>
+          <Route
+            path="/"
+            element={<Navigate to="/dashboard" replace />}
+          />
 
-    <Routes>
-      <Route path="/" element={<Navigate to="/dashboard" />} />
-      <Route path="/dashboard" element={<Dashboard jobs={jobs}/>} />
-      <Route path="/applications" element={<Applications
-          jobs={jobs}
-          onDelete={handleDelete}
-           />
-           } />
-      <Route path="/add-job" element={<AddJobPage setJobs={setJobs}/>} />
-      <Route path="/edit-job/:id" element={<EditJob jobs={jobs} setJobs={setJobs} />} />
+          <Route
+            path="/dashboard"
+            element={<Dashboard jobs={jobs} />}
+          />
 
-    </Routes>
-    </BrowserRouter>
-  )
+          <Route
+            path="/applications"
+            element={
+              <Applications
+                jobs={jobs}
+                onDelete={handleDelete}
+              />
+            }
+          />
+
+          <Route
+            path="/add-job"
+            element={<AddJobPage setJobs={setJobs} />}
+          />
+
+          <Route
+            path="/edit-job/:id"
+            element={
+              <EditJob jobs={jobs} setJobs={setJobs} />
+            }
+          />
+        </Routes>
+      </>
+    ) : (
+      <Login setIsLoggedIn={setIsLoggedIn} /> //allows Login.jsx to call setIsLoggedIn(true) after successful login.
+    )}
+  </BrowserRouter>
+);
 }
 
 export default App

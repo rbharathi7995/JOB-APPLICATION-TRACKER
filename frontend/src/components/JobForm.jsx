@@ -14,7 +14,8 @@ function JobForm({jobsFormData ,setJobsFormData}) {
                         companyName: e.target.value//means Replace only companyName with the new value.
 
                     })
-                } />
+                }
+                required />
             <input
                 type="text"
                 placeholder="Job-Title"
@@ -26,7 +27,27 @@ function JobForm({jobsFormData ,setJobsFormData}) {
                         jobTitle: e.target.value
                     })
                 }
+                required
             />
+
+            <label className="mb-2 block font-medium text-gray-700">
+                Status
+            </label>
+            <select
+             value={jobsFormData.status}
+             onChange={(e)=>
+                setJobsFormData({
+                    ...jobsFormData,
+                    status: e.target.value
+                })
+             }
+             className="mb-4 w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+            >
+                <option value="Applied">Applied</option>
+                <option value="Interview">Interview</option>
+                <option value="Offer">Offer</option>
+                <option value="Rejected">Rejected</option>
+            </select>
             <input
                 type="date"
                 value={jobsFormData.dateApplied} //to get only the date part from the date-time string.
@@ -49,6 +70,7 @@ function JobForm({jobsFormData ,setJobsFormData}) {
                         jobLink: e.target.value
                     })
                 }
+                required
             />
             <input
                 type="text"
@@ -61,6 +83,7 @@ function JobForm({jobsFormData ,setJobsFormData}) {
                         location: e.target.value
                     })
                 }
+                required
             />
             <input
                 type="text"
@@ -73,6 +96,7 @@ function JobForm({jobsFormData ,setJobsFormData}) {
                         skillsRequired: e.target.value
                     })
                 }
+                required
             />
             <input
                 type="number"

@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import JobForm from './JobForm';
+import { useNavigate } from 'react-router-dom';
 
 function AddJob({ setJobs , jobToEdit , setEditingJobId }) {
+     const [errorMessage, setErrorMessage] = useState('');
      const [jobsFormData, setJobsFormData] = useState(
         jobToEdit
             ? {
@@ -11,7 +13,8 @@ function AddJob({ setJobs , jobToEdit , setEditingJobId }) {
                 jobLink: jobToEdit.jobLink,
                 location: jobToEdit.location,
                 skillsRequired: jobToEdit.skillsRequired,
-                numberOfOpenings: jobToEdit.numberOfOpenings
+                numberOfOpenings: jobToEdit.numberOfOpenings,
+                status: jobToEdit.status || 'Applied'
             }
             : {
                 companyName: '',
@@ -20,11 +23,36 @@ function AddJob({ setJobs , jobToEdit , setEditingJobId }) {
                 jobLink: '',
                 location: '',
                 skillsRequired: '',
-                numberOfOpenings: ''
+                numberOfOpenings: '',
+                status: 'Applied'
             }
     );
 
     function handleJobSubmit(){
+        // Check whether any required field is empty or contains only spaces.
+      if (
+        !jobsFormData.companyName.trim() ||
+        !jobsFormData.jobTitle.trim() ||
+        !jobsFormData.jobLink.trim() ||
+        !jobsFormData.location.trim() ||
+        !jobsFormData.skillsRequired.trim()
+
+        ){
+            setErrorMessage('Please complete the required fields.');
+            return;
+        }
+            try{
+                const url=new URL(jobsFormData.jobLink.trim());
+                if(url.protocol !== 'https:' && url.protocol !== 'http'){
+                    throw new Error();
+                }
+            }
+            catch{
+                setErrorMessage('Enter a valid URL starting wiyth https://');
+                return;
+            }
+            
+        setErrorMessage('');
         const url=jobToEdit ? 
         `http://localhost:5000/api/jobs/${jobToEdit._id}`
          : 'http://localhost:5000/api/jobs';
@@ -38,20 +66,29 @@ function AddJob({ setJobs , jobToEdit , setEditingJobId }) {
                 'Authorization':`Bearer ${localStorage.getItem('token')}`
             },
             body: JSON.stringify(jobsFormData) //jobsFormData is not already a string.it is an object.
-        }).then((response) =>{
-            return response.json();
+        }).then(async (response) =>{
+            const data= await response.json();
+
+            if(!response.ok){
+                throw new Error(
+                    data.message || data.error || 'Please check the required fields.'
+                );
+            }
+            return data;
         }).then((data)=>{
           // setJobs((prevJobs) => [...prevJobs, data]);
             setJobs((prevJobs) =>{
                 if(jobToEdit){
                     const updatedJobs = prevJobs.map((job) => 
                         job._id === data._id  ? data : job
-                ); 
+                );                
                 setEditingJobId(null); // Reset the editing job ID after updating  
                 return updatedJobs;     
                 }
                 return [...prevJobs, data];
              })
+
+                navigate('/applications');
 
             setJobsFormData({
                 companyName: '',
@@ -62,13 +99,22 @@ function AddJob({ setJobs , jobToEdit , setEditingJobId }) {
                 skillsRequired: '',
                 numberOfOpenings: ''
             });
+        }).catch((error)=>{
+        setErrorMessage(error.message || 'Unable to save the job.');    
         })
     }
+    const navigate = useNavigate();
     
     return (
         <div className="mx-auto max-w-3xl rounded-xl bg-white p-6 shadow-md">
             <h2 className="mb-6 text-2xl font-bold text-gray-800">Add Job</h2>
- 
+
+            {errorMessage && (
+            <p className="mb-4 rounded-lg bg-red-50 p-3 text-sm text-red-700">
+                {errorMessage}
+            </p>
+            )}
+
         <JobForm
             jobsFormData={jobsFormData}
             setJobsFormData={setJobsFormData}

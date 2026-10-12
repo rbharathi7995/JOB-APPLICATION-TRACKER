@@ -1,4 +1,5 @@
 import JobCard from "../components/JobCard";
+import { Link } from 'react-router-dom';
 
 function Applications({ jobs, onDelete }) {
   return (
@@ -6,6 +7,13 @@ function Applications({ jobs, onDelete }) {
       <h1 className="mb-6 text-2xl font-bold text-gray-800">
         My Applications
       </h1>
+
+  <Link
+    to="/add-job"
+    className="rounded-lg bg-blue-600 px-5 py-2.5 font-semibold text-white hover:bg-blue-700"
+  >
+    + Add Job
+  </Link>
 
       {jobs.length === 0 ? (
         <p>No job applications yet.</p>
