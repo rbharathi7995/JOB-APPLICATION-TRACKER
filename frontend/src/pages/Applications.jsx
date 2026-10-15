@@ -16,7 +16,7 @@ function Applications({ jobs, onDelete }) {
   </Link>
 
       {jobs.length === 0 ? (
-        <p>No job applications yet.</p>
+        <p className="mt-4">No job applications yet.</p>
       ) : (
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           {jobs.map((job) => (
