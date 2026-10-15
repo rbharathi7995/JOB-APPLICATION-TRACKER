@@ -1,10 +1,11 @@
 import { useState } from 'react';
 
 
-function Login({ setIsLoggedIn }) {
+function Login({ setIsLoggedIn , setShowRegister}) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const[error, setError] = useState('');
+    
 
     function handleLogin() {
         const loginData = {
@@ -56,7 +57,7 @@ function Login({ setIsLoggedIn }) {
             <div class="space-y-4">
                 <input 
                     onChange={(e) => setEmail(e.target.value)}
-                    type="text" 
+                    type="email" 
                     placeholder="Email" 
                     className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
                     />
@@ -71,6 +72,11 @@ function Login({ setIsLoggedIn }) {
                     className="w-full rounded-lg bg-blue-600 px-4 py-3 font-semibold text-white transition hover:bg-blue-700"
 
                 >Login</button>
+
+                <button 
+                    onClick={()=> setShowRegister(true)}
+                    className="w-full rounded-lg bg-blue-600 px-4 py-3 font-semibold text-white transition hover:bg-blue-700 hover:underline"
+                >Don't have an account? Register</button>
             </div>
 
         </div>

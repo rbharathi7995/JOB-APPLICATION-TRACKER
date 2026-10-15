@@ -2,16 +2,19 @@ import { useEffect,useState } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import Navbar from './components/Navbar.jsx';
 import Login from './components/Login.jsx';
+import Register from './components/Register.jsx';
 import Dashboard from './pages/Dashboard.jsx';
 import Applications from './pages/Applications.jsx';
 import AddJobPage from './pages/AddJobPage.jsx';
 import EditJob from './pages/EditJob.jsx';
+
 function App() {
       const[jobs, setJobs] = useState([]);
       const [loading, setLoading] = useState(true);
       const [isLoggedIn, setIsLoggedIn] = useState(
         () => localStorage.getItem('token') !== null
       );
+      const [showRegister, setShowRegister] = useState(false);
 
       useEffect(() => {
         const token = localStorage.getItem('token');
@@ -102,8 +105,16 @@ return (
         </Routes>
       </>
     ) : (
-      <Login setIsLoggedIn={setIsLoggedIn} /> //allows Login.jsx to call setIsLoggedIn(true) after successful login.
-    )}
+      showRegister ? (
+        <Register setShowRegister = {setShowRegister} />
+      ):(
+      <Login 
+        setIsLoggedIn={setIsLoggedIn}   //allows Login.jsx to call setIsLoggedIn(true) after successful login.
+        setShowRegister={setShowRegister}/>
+    )
+  )}
+
+    
   </BrowserRouter>
 );
 }
