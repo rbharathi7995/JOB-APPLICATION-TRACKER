@@ -78,8 +78,15 @@ function Register( {setShowRegister} ){
                 <button 
                     onClick={handleRegister}
                     className="w-full rounded-lg bg-blue-600 px-4 py-3 font-semibold text-white transition hover:bg-blue-700"
-
                 >Register</button>
+
+                <p className="mt-2 text-center text-sm text-gray-600">
+                 Already have an account?
+                    <button 
+                        onClick={() => setShowRegister(false)}
+                        className="w-full rounded-lg bg-blue-600 px-4 py-3 font-semibold text-white transition hover:bg-blue-700"
+                    >Login</button>
+                </p>
             </div>
         </div>
         </main>
