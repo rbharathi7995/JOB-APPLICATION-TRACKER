@@ -13,7 +13,7 @@ function Login({ setIsLoggedIn , setShowRegister}) {
             password
         };
 
-        fetch('http://localhost:5000/api/auth/login', {
+        fetch(`${import.meta.env.VITE_API_URL}/api/auth/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -54,7 +54,7 @@ function Login({ setIsLoggedIn , setShowRegister}) {
                 </p>
             )}
 
-            <div class="space-y-4">
+            <div className="space-y-4">
                 <input 
                     onChange={(e) => setEmail(e.target.value)}
                     type="email" 

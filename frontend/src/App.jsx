@@ -22,7 +22,7 @@ function App() {
          return;
         }
         
-        fetch('http://localhost:5000/api/jobs',{
+        fetch(`${import.meta.env.VITE_API_URL}/api/jobs`,{
           method:'GET',
           headers: {
             Authorization:`Bearer ${token}`
@@ -48,7 +48,7 @@ function App() {
      }
 
     function handleDelete(id){
-      fetch(`http://localhost:5000/api/jobs/${id}`,{
+      fetch(`${import.meta.env.VITE_API_URL}/api/jobs/${id}`,{
         method : 'DELETE',
         headers:{
           'Authorization' :`Bearer ${localStorage.getItem('token')}`

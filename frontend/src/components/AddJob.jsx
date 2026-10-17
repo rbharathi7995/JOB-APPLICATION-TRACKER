@@ -54,8 +54,8 @@ function AddJob({ setJobs , jobToEdit , setEditingJobId }) {
             
         setErrorMessage('');
         const url=jobToEdit ? 
-        `http://localhost:5000/api/jobs/${jobToEdit._id}`
-         : 'http://localhost:5000/api/jobs';
+        `${import.meta.env.VITE_API_URL}/api/jobs/${jobToEdit._id}`
+         : `${import.meta.env.VITE_API_URL}/api/jobs`;
 
         const method=jobToEdit ? 'PUT' : 'POST';
 
